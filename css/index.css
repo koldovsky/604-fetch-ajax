@@ -1,37 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=DotGothic16&display=swap");
 
-* {
-    margin: 0;
-    padding: 0;
+:root {
+  font-family: "DotGothic16", sans-serif;
+  --main-color: black;
+  --accent-color: rgb(50, 206, 211);
 }
 
-h1 {
-    margin: 10px;
-    border: 3px solid salmon;
-    padding: 5px;
+body {
+  max-width: 980px;
+  margin: auto;
 }
 
-img {
-    border: 1px solid black;
-    width: 300px;
+header .logo,
+header .banner h1 {
+  font-size: 3.5rem;
+  text-transform: uppercase;
+  text-align: center;
 }
 
-.chosen {
-    border-color: red;
+.burger-icon {
+  font-size: 3.5rem;
 }
 
-#chosen {
-    border-color: yellow;
+#burger-checkbox {
+  display: none;
 }
 
-article p:hover {
-    text-decoration: underline;
+header .menu {
+  display: none;
 }
 
-article p::first-letter {
-    font-size: 3rem;
+input:checked ~ .menu {
+  display: block;
 }
 
-.menu {
+header .menu a {
+  display: block;
+  color: var(--main-color);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+header .menu a:hover {
+  font-weight: bold;
+}
+
+@media (min-width: 500px) {
+  .burger-icon {
+    display: none;
+  }
+
+  header nav {
+    display: flex;
+  }
+
+  #home .menu {
     display: flex;
     justify-content: space-around;
+    align-items: center;
+    flex: 1;
+  }
+}
+
+header .banner {
+  background-image: url(../img/baby-yoda.svg);
+  min-height: 400px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+header .banner h1 {
+  color: var(--accent-color);
+}
+
+.products article {
+  border: 1px solid var(--main-color);
+  padding: 5px;
+}
+
+.products article img {
+  display: block;
+  width: 100%;
+}
+
+.products article .buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+@media (min-width: 560px) {
+  .products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 5px;
+  }
+}
+
+@media (min-width: 660px) {
+  .products {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 980px) {
+  .products {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+/* Controls */
+
+.button {
+  padding: 0.35em 1.2em;
+  border: 0.1em solid #ffffff;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.12em;
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+  transition: color 0.7s;
+  background-color: transparent;
+}
+
+.button:hover {
+  color: #000000;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.card-button {
+  border-color: black;
+  color: black;
+}
+
+.card-button:hover {
+  background-color: black;
+  color: white;
 }
