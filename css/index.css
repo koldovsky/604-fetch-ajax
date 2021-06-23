@@ -112,6 +112,16 @@ header .banner h1 {
   }
 }
 
+.zebra-bg {
+  background-color: grey;
+}
+
+.products-carousel .product-image {
+  display: block;
+  width: 50%;
+  margin: auto;
+}
+
 /* Controls */
 
 .button {
