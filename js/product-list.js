@@ -1,52 +1,18 @@
-const productsJson = `
-[
-    {
-        "id": "1",
-        "title": "Baby Yoda",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga expedita obcaecati adipisci explicabo impedit facere est qui voluptate. Fugiat libero molestiae suscipit eaque quae nihil sequi esse numquam dolor nisi!",
-        "price": 10.99,
-        "imgUrl": "img/baby-yoda.svg"
-    },
-    {
-        "id": "2",
-        "title": "Banana",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga expedita obcaecati adipisci explicabo impedit facere est qui voluptate. Fugiat libero molestiae suscipit eaque quae nihil sequi esse numquam dolor nisi!",
-        "price": 12.99,
-        "imgUrl": "img/banana.svg"
-    },
-    {
-        "id": "3",
-        "title": "Girl",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga expedita obcaecati adipisci explicabo impedit facere est qui voluptate. Fugiat libero molestiae suscipit eaque quae nihil sequi esse numquam dolor nisi!",
-        "price": 15.99,
-        "imgUrl": "img/girl.svg"
-    },
-    {
-        "id": "4",
-        "title": "Viking",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga expedita obcaecati adipisci explicabo impedit facere est qui voluptate. Fugiat libero molestiae suscipit eaque quae nihil sequi esse numquam dolor nisi!",
-        "price": 13.99,
-        "imgUrl": "img/viking.svg"
-    },
-    {
-        "id": "5",
-        "title": "Kitten",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga expedita obcaecati adipisci explicabo impedit facere est qui voluptate. Fugiat libero molestiae suscipit eaque quae nihil sequi esse numquam dolor nisi!",
-        "price": 18.99,
-        "imgUrl": "https://placekitten.com/200/139"
-    },
-    {
-        "id": "6",
-        "title": "Kitten",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga expedita obcaecati adipisci explicabo impedit facere est qui voluptate. Fugiat libero molestiae suscipit eaque quae nihil sequi esse numquam dolor nisi!",
-        "price": 17.99,
-        "imgUrl": "https://placekitten.com/200/139?2"
-    }
-]
-`;
 
-function renderProducts(products, sortDirection) {
-    const sortedProducts = [...products].sort( (a, b ) => 
+async function convertCurrency(products, currency) {
+    const usdRatesResponse = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const usdRates = await usdRatesResponse.json();
+    const currRate = usdRates.rates[currency];
+    return products.map( product => {
+        product.convertedPrice = (product.price * currRate).toFixed(2);
+        return product;
+    });
+}
+
+async function renderProducts(products, sortDirection = 'ascending') {
+    const currency = document.querySelector('.currency').value;
+    const convertedProducts = await convertCurrency(products, currency);
+    const sortedProducts = [...convertedProducts].sort( (a, b ) => 
         sortDirection === 'ascending' ? a.price - b.price : b.price - a.price
     );
     let productsHtml = '';
@@ -58,28 +24,53 @@ function renderProducts(products, sortDirection) {
                 <p>${product.description}</p>
                 <div class="buttons">
                     <button class="button card-button">Info</button>
-                    <button class="button card-button">Buy - $${product.price}</button>
+                    <button class="button card-button">Buy - ${product.convertedPrice}</button>
                 </div>
         </article>`;
     }
     document.querySelector('.products').innerHTML = productsHtml;
 }
 
-const products = JSON.parse(productsJson);
-
-renderProducts(products, 'ascending');
-
-
-const btnSortAsc = document.querySelector('.sort-asc');
-const btnSortDesc = document.querySelector('.sort-desc');
-
-btnSortAsc.addEventListener('click', sortAscending);
-btnSortDesc.addEventListener('click', sortDescending);
-
-function sortAscending() {
+async function initProducts() {
+    const response = await fetch('products.json');
+    const products = await response.json();
     renderProducts(products, 'ascending');
+    document
+        .querySelector('.sort-asc')
+        .addEventListener('click', () => renderProducts(products, 'ascending'));
+    document
+        .querySelector('.sort-desc')
+        .addEventListener('click', () => renderProducts(products, 'descending'));
+    document   
+        .querySelector('.convert')
+        .addEventListener('click', () => renderProducts(products))
 }
 
-function sortDescending() {
-    renderProducts(products, 'descending');
-}
+// AJAX Sample:
+// function initProducts() {
+//     const xhr = new XMLHttpRequest();
+//     xhr.onreadystatechange = function() {
+//         if (xhr.readyState === 4 && xhr.status === 200) {
+//             const products = JSON.parse(xhr.responseText);
+//             renderProducts(products, 'ascending');
+//             document
+//                 .querySelector('.sort-asc')
+//                 .addEventListener('click', () => renderProducts(products, 'ascending'));
+//             document
+//                 .querySelector('.sort-desc')
+//                 .addEventListener('click', () => renderProducts(products, 'descending'));
+//         }
+//     }
+//     xhr.open('GET', 'products.json', true);
+//     xhr.send();
+// }
+
+initProducts();
+
+// fetch('products.json')
+//     .then( response => response.json() )
+//     .then( productList => {
+//         products = productList;
+//         renderProducts(products, 'ascending');
+//     });
+

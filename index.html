@@ -34,20 +34,26 @@
     </header>
     <main>
       <h2 id="products">Products</h2>
+      <label>Currency: <input type="text" class="currency" value="USD"></label>
+      <button class="button card-button convert">Convert</button>
+      <br>
       <button class="button sort-asc card-button">Sort by price from lowest</button>
       <button class="button sort-desc card-button">Sort by price from highest</button>
       <div class="products"></div>
     </main>
     <footer>
       <h2 id="contacts">Contacts!</h2>
-      <form action="" method="POST">
-        <label>Your name:
-          <input type="text" name="user-name" placeholder="User Name">
+      <form class="contact-form">
+        <label>
+            User name: <input name="name" type="text" placeholder="User name" required>
         </label>
-        <label>Your email:
-          <input type="email" name="user-email" placeholder="User Email">
+        <br>
+        <label>
+            Message: <textarea name="message" id="" cols="30" rows="10"></textarea>
         </label>
+        <br>
         <input type="submit">
+        <input type="reset">
       </form>
       <p>
         Some contacts
@@ -56,5 +62,6 @@
     <script src="js/clock.js"></script>
     <script src="js/product-list.js"></script>
     <script src="js/carousel.js"></script>
+    <script src="js/contact.js"></script>
   </body>
 </html>
